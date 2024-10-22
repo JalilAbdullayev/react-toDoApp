@@ -1,9 +1,16 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {NewTodo} from "./NewTodo.jsx";
 import {TodoList} from "./TodoList.jsx";
 
 const App = () => {
-    const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useState(() => {
+        const localValue = localStorage.getItem("ITEMS");
+        if(localValue == null) return [];
+        return JSON.parse(localValue);
+    });
+    useEffect(() => {
+        localStorage.setItem("ITEMS", JSON.stringify(todos));
+    }, [todos]);
 
     const addTodo = title => {
         setTodos(currentTodos => {
